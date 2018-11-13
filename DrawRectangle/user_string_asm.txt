@@ -1,0 +1,104 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  file name   : user_string.asm                            ;
+;  author      : Iglesias-Flores, Rebecca
+;  description : read characters from the keyboard,       ;
+;	             then echo them back to the ASCII display ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; The following CODE will go into USER's Program Memory
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+.CODE
+.ADDR x0000
+
+;;;  CIT 593 students - run this code and see how it works before modifying!
+;;;  once you load it into PennSim, press "continue" instead of step to run
+;;;  type a character by clicking on the white box in left hand corner of PennSim
+
+
+;;;  The following code will output "Type Here>" on the ASCII display
+;;;  then it will then read one character from the keyboard
+;;;  and output it back to the display
+
+	;CONST R0, x54	; ASCII code for T
+	;TRAP x01	    ; this calls "TRAP_PUTC" in os.asm	
+
+	;CONST R0, x79   ; ASCII code for y
+	;TRAP x01
+
+	;CONST R0, x70   ; ASCII code for p
+	;TRAP x01
+
+	;CONST R0, x65   ; ASCII code for e
+	;TRAP x01
+
+	;CONST R0, x20   ; ASCII code for space
+	;TRAP x01
+
+	;CONST R0, x48	; ASCII code for H
+	;TRAP x01
+
+	;CONST R0, x65	; ASCII code for e
+	;TRAP x01
+
+	;CONST R0, x72	; ASCII code for r
+	;TRAP x01
+
+	;CONST R0, x65	; ASCII code for e
+	;TRAP x01
+
+	;CONST R0, x3E	; ASCII code for >
+	;TRAP x01
+	
+	;; CIT 593 To-Do
+	;; add code to "loop" reading characters from keyboard and outputting them to display
+	;; until the "enter" key is pressed
+
+	;; pseudocode of algorithm you must implement for problem #1
+	;;
+	;; loop until (R0 == enter)
+	;;    read character from keyboard into R0 using TRAP_GETC
+	;;    write character from R0 to ASCII display using TRAP_PUTC
+	;;    repeat loop...
+	;; loop_end 
+    
+.DATA
+.ADDR x4000            ;starting data mem address with 4000 
+
+global_array
+  .FILL x49             ; starting at address 4000, fill with hex code I
+  .FILL x20             ; starting at address 4001, fill with hex code  
+  .FILL x6C             ; starting at address 4002, fill with hex code l
+  .FILL x6F             ; starting at address 4003, fill with hex code o
+  .FILL x76             ; starting at address 4004, fill with hex code v  
+  .FILL x65             ; starting at address 4005, fill with hex code e          
+  .FILL x00             ; fill last address with null, so it stops in the loop
+
+.CODE    
+    CONST R0, x00      ; load low bit data memory address
+    HICONST R0,x40     ; load high bite data memory address
+    TRAP  x03          ; call TRAP_PUTS from os.asm
+    END                ; end program
+    
+
+    ;TRAP x00        ; call trap instruction that gets input
+    ;CMPI R0, x0A    ; compare contents of register to x0A "enter"
+    ;BRz END         ; if R0 == x0A then go to END
+    
+    ;CMPI R0, x00     ; compare contents of register to last register (null) x00
+    ;BRz END          ; if R0 reaches the end of the registers, then END
+    ;ADD R0, R0, #1   ; go to next register and get contents
+    ;TRAP x01         ; this is the trap instruction that writes
+    ;BRnzp MY_LOOP   ; this is the loop 
+   
+
+
+    
+    
+
+
+

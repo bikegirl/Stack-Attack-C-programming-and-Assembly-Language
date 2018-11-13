@@ -1,0 +1,33 @@
+#########################################################
+#  file name   : user_echo_script.txt                   #
+#  author      : Iglesias-Flores Rebecca                #
+#  description : PennSim script file to automate        #
+#                assembling, loading, reset, and PC set #
+#########################################################
+
+# clear the PennSim screen
+clear
+
+# reset PennSim Simulator (clears all memory/regs)
+reset
+
+# assemble os.asm file into os.obj file
+as os os
+
+# assemble user_echo.asm file into user_echo.obj file
+as user_echo user_echo
+
+# load os.obj into OS program memory
+ld os
+
+# load user_echo.obj into USER program memory
+ld user_echo
+
+# we will not need to set PC to 0, instead PC=8200
+# will be fine (that's default) as that is where
+# os.obj will be loaded
+# set PC 0
+
+# once the PC = this label, it will stop the LC4
+break set END
+

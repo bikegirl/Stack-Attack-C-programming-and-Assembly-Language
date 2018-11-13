@@ -1,0 +1,35 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;main;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;R6 is stack pointer, points to x7FFF
+;;R5 is frame pointer, points to R6
+;;R7 holds the address of wherever the label is at (whichever label is called in user start)
+		.CODE
+		.FALIGN
+main
+	;; prologue
+	STR R7, R6, #-2	   ;; save return address
+	STR R5, R6, #-3	   ;; save base pointer, at -3 offset
+	ADD R6, R6, #-3    ;; moving pointer -3 up the stack
+	ADD R5, R6, #0     ;; moving R5's pointer to where R6 is pointing
+	ADD R6, R6, #-2	   ;; allocate stack space for local variables
+	;; function body
+	CONST R7, #5       ;; a = 5 (store on stack), where R5 is pointing to offset -1
+	STR R7, R5, #-1
+	CONST R7, #0       ;; b = 0 (store on stack), where R5 is pointing to offset -2
+	STR R7, R5, #-2
+	LDR R7, R5, #-1    ;; load A from data memory into R7 (from R5 offset 1), overwriting R7 
+	ADD R6, R6, #-1    ;; move base pointer up the stack, offset -1
+	STR R7, R6, #0     ;; make a copy of A in where R6 is poing to as an argument for SUB_FACTORIAL
+	JSR SUB_FACTORIAL  ;; now call sub_factorial
+	LDR R7, R6, #-1	   ;; grab return value
+	ADD R6, R6, #1	   ;; free space for arguments, allocate stack space
+	STR R7, R5, #-2
+	CONST R7, #0
+L1_problem1
+	;; epilogue
+	ADD R6, R5, #0	   ;; pop locals off stack
+	ADD R6, R6, #3	   ;; free space for return address, base pointer, and return value
+	STR R7, R6, #-1	   ;; store return value
+	LDR R5, R6, #-3	   ;; restore base pointer
+	LDR R7, R6, #-2	   ;; restore return address
+	RET
+

@@ -1,0 +1,63 @@
+PennSim.jar
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  file name   : user_string.asm                            ;
+;  author      : Iglesias-Flores, Rebecca
+;  description : read characters from the keyboard,       ;
+;	             then echo them back to the ASCII display ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; The following CODE will go into USER's Program Memory
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;TRAP_DRAW_RECTANGLE
+;File Register
+;R0 x location
+;R1 y location
+;R2 length of the rectangle
+;R3 width of the side of the rectangle (in number of pixels)
+;R4 the color of the rectangle
+;R5 pointer to where we're drawing
+;R6 hold data memory address
+
+.CODE
+.ADDR x0000
+
+
+.CODE    
+    CONST R0 #50      ;COMMENT LATER
+    CONST R1 #5     
+    CONST R2 #10
+    CONST R3 #5
+    CONST R4 x00
+    HICONST R4 x7C
+    
+    TRAP  x09        ; call TRAP_GETS from os.asm
+    
+    CONST R0 #10      ;COMMENT LATER
+    CONST R1 #10    
+    CONST R2 #50
+    CONST R3 #40
+    CONST R4 xE0
+    HICONST R4 x07
+    
+    TRAP  x09        ; call TRAP_GETS from os.asm
+    
+    CONST R0 #120      ;COMMENT LATER
+    CONST R1 #100    
+    CONST R2 #27
+    CONST R3 #10
+    CONST R4 xE0
+    HICONST R4 xFF
+    
+    TRAP  x09        ; call TRAP_GETS from os.asm
+   
+END                  ; end program
+
+    
+    
+
+
+

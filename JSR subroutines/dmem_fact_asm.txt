@@ -1,0 +1,77 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  file name   : dmem_fact.asm                          ;
+;  author      : Iglesias-Flores Rebecca                ;
+;  description : LC4 Assembly program to compute the    ;
+;                learning how to load/store in dmem     ;
+;                factorial of a number w/subroutine     ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+;;; pseudo-code of factorial_sub algorithm
+;//cited from homework instructions HW06
+;Use the .FILL directive to populate 5 rows of data memory starting address x4020
+;with the numbers: 6, 5, 8, 10, -5. Write a short assembly program that will load 
+;each of the 5 rows of data memory that you’ve populated and call the subroutine 
+;you’ve created in problem #2 on each of those rows. After the factorial subroutine 
+;is run on each row, you should then store the #’s factorial back to data memory 
+;overwriting the original #. As an example of how the first row of data memory should 
+;look after your program completes, address x4020, should have the number #720.
+;This is my register file...
+;RO = register for loading data mem address
+;R2 = Loop counter
+;R3 = A
+;R4 = B
+
+;;; TO-DO: Implement the factorial_sub algorithm above using LC4 Assembly instructions
+
+
+.DATA
+.ADDR X4020
+
+global_array
+  .FILL #6             ; starting at address 4020
+  .FILL #5             ; fill with address 4021
+  .FILL #8             ; fill with address 4022
+  .FILL #10            ; fill with address 4023
+  .FILL #-5            ; fill with address 4024
+
+.CODE                  ; l ines below are Program Memory
+.ADDR x0000            ; w here to start in Program Memory
+
+INIT
+  LEA R0, global_array ; load starting address of data to R0
+                       ; same as HICONST =x40, CONST x20
+                       ; CONST R1, #0         R1 = running total
+  CONST R2, #5         ; R2 = number of items to add to loop counter
+                       ; aka – loop counter
+                       
+FOR_LOOP
+  CMPI R2, #0          ; NZP <= 5 continue / LOOP COUNTER - 0
+  BRnz END             ; tests if R2 is nz, if NZP <= 0, jump to END
+  LDR R3, R0, #0       ; LOAD the data (at R0) into R3
+  JSR SUB_FACTORIAL    ; call subroutine
+  STR R4, R0, #0       ; Storing factorial number and storing in the original dmem
+  ADD R0, R0, #1       ; add 1 to address in R0, go to next address
+  ADD R2, R2, #-1      ; decrease the loop counter by 1
+  JMP FOR_LOOP         ; could also use BRnzp LOOP
+  
+.FALIGN
+SUB_FACTORIAL
+  ADD R4, R3, #0       ; B = A, Setting A to B
+  CMPI R4, #0          ; sets NZP (B-0)
+  BRnz END_ERROR       ; tests NZP (if A less than 0?, if yes, goto END_ERROR)
+  CMPI R4, #7          ; sets NZP (A-7)
+  BRp END_ERROR        ; tests NZP (if A greater than 7?, if yes, goto END_ERROR)
+  
+LOOP  
+  CMPI R3, #1          ; sets NZP (A-1)
+  BRnz END_FACTORIAL   ; tests NZP (was A-1 neg or less than 1?, if yes, goto END_FACTORIAL)
+  ADD R3, R3, #-1      ; A=A-1
+  MUL R4, R4, R3       ; B=B*A
+  BRnzp LOOP           ; always goto LOOP
+  END_FACTORIAL
+RET                    ; end subroutine
+END_ERROR
+  CONST R4, #-1        ; B - 1, decrement B
+RET                    ; end subroutine 
+END                    ; end program

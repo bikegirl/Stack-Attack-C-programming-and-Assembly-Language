@@ -1,0 +1,25 @@
+#########################################################
+#  file name   : factorial_script.txt                   #
+#  author      : Rebecca Iglesias-Flores                #
+#  description : PennSim script file to automate        #
+#                assembling, loading, reset, and PC set #
+#########################################################
+
+# clear the PennSim screen
+clear
+
+# reset PennSim Simulator (clears all memory/regs)
+reset
+
+# assemble dmem_fact.asm file into dmem_fact.obj file
+as dmem_fact dmem_fact
+
+# load factorial.obj into program memory
+ld dmem_fact
+
+# set Program Counter register to 0, 
+# enabling us to fetch instruction at line 0 in program memory
+set PC 0
+
+break set END
+
